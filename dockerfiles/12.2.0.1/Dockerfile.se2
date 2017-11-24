@@ -41,7 +41,11 @@ ENV ORACLE_BASE=/opt/oracle \
     CHECK_SPACE_FILE="checkSpace.sh" \
     CHECK_DB_FILE="checkDBStatus.sh" \
     USER_SCRIPTS_FILE="runUserScripts.sh" \
-    INSTALL_DB_BINARIES_FILE="installDBBinaries.sh"
+    INSTALL_DB_BINARIES_FILE="installDBBinaries.sh" \
+    ORACLE_SID="ORCLDB" \
+    ORACLE_PDB="ORCLPDB1" \
+    ORACLE_PWD="Fij7yu6k" \
+    ORACLE_CHARACTERSET="AL32UTF8"
 
 # Use second ENV so that variable get substituted
 ENV INSTALL_DIR=$ORACLE_BASE/install \
@@ -71,10 +75,4 @@ RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
 USER oracle
 WORKDIR /home/oracle
 
-VOLUME ["$ORACLE_BASE/oradata"]
-EXPOSE 1521 5500
-HEALTHCHECK --interval=1m --start-period=5m \
-   CMD "$ORACLE_BASE/$CHECK_DB_FILE" >/dev/null || exit 1
-    
-# Define default command to start Oracle Database. 
-CMD exec $ORACLE_BASE/$RUN_FILE
+RUN $ORACLE_BASE/$RUN_FILE
